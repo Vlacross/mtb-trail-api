@@ -1,0 +1,23 @@
+Landing Page-
+["widescreen" black-bars across top and bottom of mtb pic
+	input dash in one and a header in the other w/ instructions"find a trail"
+keep results section hidden
+	-results section has button to return to top and serach new area
+	-shows num of results(legend) top and bottom of list
+	-lets know if none are found
+	-maybe integrate a graphic interface filter(s) bar with access to enable 
+	 more options to show from response data]
+
+
+
+/*maybe use geo locate via ip to creat a placeholer/value*/
+
+have an input for location/city and a distance/defined locallity input
+	-fetch input location to get lat/lon(geocodio)
+	return lat/lon and assign variable names
+
+fetch trails list with lat/lon vars(mtbproj)
+	
+	
+
+

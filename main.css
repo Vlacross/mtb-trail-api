@@ -1,0 +1,27 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+  
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+.trail-search {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.mtb-image {
+    border: solid 1px white;
+    height: 80vh;
+}
+

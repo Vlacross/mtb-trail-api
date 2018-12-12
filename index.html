@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<link href="main.css" type="text/css" rel="stylesheet">
+
+</head>
+<body>
+<main role="main">
+    <section id="trail-search" class="trail-search">
+        <h1>Search for Singletracks Near You!</h1>
+        <p class="mtb-image">mtb image here</p>
+        <form id="trail-search-form" class="trail-search-form">
+       <fieldset class="search-panel">
+
+        <label for="mtb-trail-search-input" id="mtb-trail-search-label" class="mtb-trail-search-label">Search your location for enarby trails!
+            <input id="mtb-trail-search-input" class="mtb-trail-search-input" type="text" required>
+       </label>
+
+       <label for="distance-from-location-input" id="distance-from-location-label" class="distance-from-location-label">
+            <input id="distance-from-location-input" class="distance-from-location-input" type="number" min="1" max="500">
+       </label>
+
+       <label for="mtb-trail-search-submit" id="mtb-trail-submit-label" class="mtb-trail-submit-label">Enter how many miles from your location:
+            <input id="mtb-trail-search-submit" class="mtb-trail-search-submit" type="submit" required>
+       </label>
+
+       </fieldset>
+       </form>
+    </section>
+
+    <section id="results" class="results">
+</section>
+
+
+
+
+
+</main>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+<script src="script.js"></script>
+</body>
+</html>
