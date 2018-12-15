@@ -5,10 +5,17 @@
 body {
     background-color: black;
     color: white;
+    opacity: 1;
   
 }
 
 main {
+    display: flex;
+    flex-direction: column;
+}
+
+li {
+    text-decoration: none;
     display: flex;
     flex-direction: column;
 }
@@ -23,5 +30,22 @@ main {
 .mtb-image {
     border: solid 1px white;
     height: 80vh;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.28),
+        rgba(0, 0, 0, 0.28)
+),
+                URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
+    background-size: 100%;
+    
 }
 
+.mtb-image:hover {
+    height: 80vh;
+    background: URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
+    background-size: 100%;
+}
+
+
+.listing-icon {
+    max-width: 160px;
+}
