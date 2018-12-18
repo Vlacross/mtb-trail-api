@@ -24,15 +24,18 @@ input {
 }
 
 li {
+    flex: 1 0 40%;
     text-decoration: none;
-    padding: 22px;
+    padding: 0 22px 22px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     border-radius: 20px;
     box-shadow: 0 0 15px forestgreen;
+    margin: 30px; 
 }
+
+
 
 .banner {
     display: flex;
@@ -50,7 +53,7 @@ li {
 }
 
 .search-panel {
-    background: linear-gradi   
+    background: linear-gradient ( 
         rgba(0, 0, 0, 0.28),  
         rgba(0, 0, 0, 0.28)
         );
@@ -100,6 +103,7 @@ li {
 
 .tab {
     width: 20%;
+    
     height: 3vh;
     margin: auto;
     box-shadow: 0 0 15px white;
@@ -129,7 +133,33 @@ li {
 }
 
 .results {
-    border: solid 1px goldenrod; 
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    box-shadow: 0 0 25px goldenrod inset; 
+}
+
+.listing-content {
+    margin: 14px;
+}
+
+.forecast-tab {
+    
+    min-width: 140px;
+    height: 3vh;
+    
+    box-shadow: 0 0 15px white;
+    border-radius: 0px 0px 8px 8px;
+    transition: all 500ms;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.forecast-tab:hover {
+    box-shadow: 0 0 25px white inset;
+    
+
 }
 
 .listing-icon {
@@ -160,6 +190,12 @@ li {
       background-size: cover;
       background-position: 30% 0px;
   }
+}
+
+@media only screen and (max-width: 810px) {
+    .tab {
+        min-width: 150px;
+    }
 }
 
 @media only screen and (max-width: 600px) {
