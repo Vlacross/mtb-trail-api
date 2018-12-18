@@ -3,10 +3,6 @@
     /* transition: all 500ms; */
 }
 
-[draggable=true] {
-    cursor: move;
-}
-
 body {
     background-color: black;
     color: white;
@@ -33,7 +29,7 @@ li {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     border-radius: 20px;
     box-shadow: 0 0 15px forestgreen;
 }
@@ -41,6 +37,7 @@ li {
 .banner {
     display: flex;
     justify-content: center;
+    
 }
 
 .text {
@@ -53,12 +50,10 @@ li {
 }
 
 .search-panel {
-    background: linear-gradient(
-        rgba(0, 0, 0, 0.28),
+    background: linear-gradi   
+        rgba(0, 0, 0, 0.28),  
         rgba(0, 0, 0, 0.28)
         );
-    
-    
     border: none;
     border-radius: 20px 8px 20px 8px;
     box-shadow: 0 0 15px white;
@@ -75,12 +70,6 @@ li {
 
 .trail-search {
     padding: 4px;
-    /* display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column; */
-    
-
 }
 
 .mtb-image {
@@ -92,12 +81,11 @@ li {
         rgba(0, 0, 0, 0.05),
         rgba(0, 0, 0, 0.05)
         ),
-            URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
+        URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
     background-size: 100%;
     border-radius: 8px 20px 8px 20px;
     align-content: center;
-    box-shadow: 0 0 15px white;    
-    
+    box-shadow: 0 0 15px white;        
 }
 
 .mtb-image:hover {
@@ -106,14 +94,42 @@ li {
         rgba(0, 0, 0, 0.28),
         rgba(0, 0, 0, 0.28)
         ),
-            URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
-    background-size: 100%;
+        URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
+    background-size: 100%; 
+}
+
+.tab {
+    width: 20%;
+    height: 3vh;
+    margin: auto;
+    box-shadow: 0 0 15px white;
+    border-radius: 0px 0px 8px 8px;
+    transition: all 500ms;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.tab:hover {
+    box-shadow: 0 5px 35px white;
+    border-radius: 8px 8px 8px 8px;
+    transform: translateY(20%);
+}
+
+.tab:active {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition-duration: 10ms;
     
 }
 
+.tab-span {
+    margin: auto;
+}
+
 .results {
-    border: solid 1px goldenrod;
-    
+    border: solid 1px goldenrod; 
 }
 
 .listing-icon {
@@ -126,4 +142,49 @@ li {
 
 .text {
     margin: 2px 0;
+}
+
+@media only screen and (max-width: 900px) {
+    .search-panel {
+        background: linear-gradient(  
+            rgba(0, 0, 0, 0.5),  
+            rgba(0, 0, 0, 0.5)
+            );
+    }
+    .mtb-image {
+      background-size: cover;
+      background-position: 30% 0px;
+      
+  }
+    .mtb-image:hover {
+      background-size: cover;
+      background-position: 30% 0px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+    .mtb-image {
+        background-size: cover;
+        background-position: 25% 0px;
+        
+    }
+    .mtb-image:hover {
+        background-size: cover;
+        background-position: 25% 0px;
+  
+    }
+
+}
+
+@media only screen and (max-width: 400px) {
+    .mtb-image {
+        background-size: cover;
+        background-position: 20% 0px;
+        
+    }
+    .mtb-image:hover {
+        background-size: cover;
+        background-position: 20% 0px;
+   
+    }
 }

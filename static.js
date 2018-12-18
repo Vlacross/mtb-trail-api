@@ -1,4 +1,4 @@
-export { objData } from "static.js"
+
 
 const objData = { trails: [
     {
@@ -120,4 +120,4 @@ const resultsTemplate =
     </section>
 `
 
-export {objData}
+
