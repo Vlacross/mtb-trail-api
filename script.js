@@ -5,6 +5,8 @@ const API_KEY = {
     OPEN_WEATHER: "a1e69f8910c23992c2e54b530c782490"
 }
 
+const searchTabTrayOpen =  `<div id="search-tray-tab" class="search-tray-tab open hidden"><span class="tab-span">Search</span></div>`
+const searchTabTrayClose = `<div id="search-tray-tab" class="search-tray-tab close"><span class="tab-span">Close Tray</span></div>`
 
 
   /*handle response */
@@ -16,13 +18,13 @@ function checkResponse(res) {
 
 function buildList(res) {
     let trails = res.trails
-    console.log(trails)
+    console.log(res)
     let results = ""
     let count = 0
 
     for (let i = 0; i < trails.length; i++) {
         results +=
-        `<li class="trail-listing ${i}"> <div class="forecast-tab"><span class="forecast-tab-span">Forecast</span></div>
+        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-lon="${trails[i].longitude}"> <div class="forecast-tab"><span class="forecast-tab-span">Forecast</span></div>
         <section class="forecast-display"></section>
             <div class="listing-wrapper">
                 
@@ -67,24 +69,65 @@ function getLat(inputSearch, distanceFrom) {
     .catch(err => console.log(err.message))
 }
 
-  /*show search-tray for new search query */
-function watchSearchTab() {
 
-    $('main').on('click', '.tab', function(e) {
-        e.preventDefault();
-        $('.tab-span').addClass('hidden')
-        $('.tab').slideUp(500)
-        $('.trail-search-form').removeClass('hidden').slideDown(1000)
-    })    
+  /*obtain weather forecasts for trails upon request */
+function findForecast(diva) {
+    
 }
 
+function watchResultsActivity() {
+    console.log('here')
+    let test = document.querySelector('.trail-listing')
+    console.log(test)
+    $(document).on('click', '.forecast-tab', function(e) {
+        const diva = $(this).parent()[0].dataset
+        let forecast = findForecast(diva)
+        console.log(diva)
+    })
+}
+
+  /*show search-tray for new search query */
+
+function watchSearchTab() {
+
+    function closeSearchTab() {
+      let tabState = $("[class~='search-tray-tab']").attr('class')
+        if(tabState == 'search-tray-tab close') {
+        $('main').on('click', '.search-tray-tab', function(e) {
+            e.preventDefault();
+        $('.search-tray-tab').slideUp(500) 
+        $('.trail-search-form').addClass('hidden').slideUp(1000)
+        $('.search-tray-tab').replaceWith(searchTabTrayOpen).removeClass('hidden')
+        $('.search-tray-tab').slideDown(300)
+        watchSearchTab();
+        })
+        }
+        
+    }
+
+    function openSearchTab() {
+      let tabState = $("[class~='search-tray-tab']").attr('class')
+        if(tabState == 'search-tray-tab open hidden') {
+        $('main').on('click', '.search-tray-tab', function(e) {
+            e.preventDefault(); 
+        $('.search-tray-tab').slideUp(500)
+        $('.trail-search-form').removeClass('hidden').slideDown(1000)
+        $('.search-tray-tab').replaceWith(searchTabTrayClose).fadeIn(500)
+        closeSearchTab();
+        })  
+    }
+    }
+
+openSearchTab()
+}
 function displayResults() {
     setTimeout(function() {
-        $('.tab').removeClass('hidden')
-        $('.tab').slideDown(1000) }, 2000)  
+        $('.search-tray-tab').removeClass('hidden')
+        $('.search-tray-tab').slideDown(1000) }, 2000)  
     $('.results').removeClass('hidden')
     $('.results').fadeIn(3000)
     watchSearchTab();
+    watchResultsActivity()
 }
 
 function leaveLanding() {

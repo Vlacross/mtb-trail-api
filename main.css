@@ -101,7 +101,7 @@ li {
     background-size: 100%; 
 }
 
-.tab {
+.search-tray-tab {
     width: 20%;
     
     height: 3vh;
@@ -114,13 +114,13 @@ li {
     justify-content: center;
 }
 
-.tab:hover {
+.search-tray-tab:hover {
     box-shadow: 0 5px 35px white;
     border-radius: 8px 8px 8px 8px;
     transform: translateY(20%);
 }
 
-.tab:active {
+.search-tray-tab:active {
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -128,7 +128,7 @@ li {
     
 }
 
-.tab-span {
+.search-tray-tab-span {
     margin: auto;
 }
 
@@ -172,6 +172,10 @@ li {
 
 .text {
     margin: 2px 0;
+}
+
+[class*="search-tray-tab"] {
+    text-align: center;
 }
 
 @media only screen and (max-width: 900px) {
