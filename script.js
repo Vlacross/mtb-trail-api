@@ -5,8 +5,8 @@ const API_KEY = {
     OPEN_WEATHER: "a1e69f8910c23992c2e54b530c782490"
 }
 
-const searchTabTrayOpen =  `<div id="search-tray-tab" class="search-tray-tab open hidden"><span class="tab-span">Search</span></div>`
-const searchTabTrayClose = `<div id="search-tray-tab" class="search-tray-tab close"><span class="tab-span">Close Tray</span></div>`
+const searchTabTrayOpen =  `<div id="search-tray-tab" class="search-tray-tab open hidden" tabindex="0"><span class="tab-span">Search</span></div>`
+const searchTabTrayClose = `<div id="search-tray-tab" class="search-tray-tab close"><span class="tab-span" tabindex="0">Close Tray</span></div>`
 
 
   /*handle response */
@@ -14,6 +14,39 @@ function checkResponse(res) {
     if(res.ok) {
         return res.json()
     } throw new Error(res.statusText)
+}
+
+function sortData(res) {
+
+    let arr = res.list
+    
+    console.log()
+    let arra = []
+    arr.map(x => {
+        var targetDay = new Date(x.dt_txt).getDay()
+        let r = Date(x.dt)
+        var today = new Date().getDay()
+        if(targetDay == today) {console.log('today')}
+        else if(targetDay == today + 1) {console.log('tomorrow')}
+        else if(targetDay == today + 2) {console.log('the day after tomorrow')}
+        else if(targetDay == today + 3) {console.log('the day after the day after tomorrow')}
+        else if(targetDay == today + 4) {console.log('the next day')}
+        else if(targetDay == today + 5) {console.log('Mineys')}
+        else {console.log(targetDay)}
+        
+    })
+    
+}
+
+function buildForecast(res) {
+    console.log(res)
+    // const today = new Date()
+    const rawDate = Date(res.list[0].dt)
+    const targetDate = new Date(rawDate)
+    console.log(targetDate.getMonth())
+    // console.log(rawDate.getMonth())
+    sortData(res)
+
 }
 
 function buildList(res) {
@@ -24,7 +57,7 @@ function buildList(res) {
 
     for (let i = 0; i < trails.length; i++) {
         results +=
-        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-lon="${trails[i].longitude}"> <div class="forecast-tab"><span class="forecast-tab-span">Forecast</span></div>
+        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-lon="${trails[i].longitude}"> <div class="forecast-tab" tabindex="0"><span class="forecast-tab-span">Forecast</span></div>
         <section class="forecast-display"></section>
             <div class="listing-wrapper">
                 
@@ -72,7 +105,11 @@ function getLat(inputSearch, distanceFrom) {
 
   /*obtain weather forecasts for trails upon request */
 function findForecast(diva) {
-    
+    const lati = diva.lat
+    const longi = diva.lon
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
+    .then(response => checkResponse(response))
+    .then(resj => buildForecast(resj))
 }
 
 function watchResultsActivity() {
@@ -118,7 +155,7 @@ function watchSearchTab() {
     }
     }
 
-openSearchTab()
+    openSearchTab()
 }
 function displayResults() {
     setTimeout(function() {
@@ -161,14 +198,7 @@ function watchForm() {
     })       
 }
 
-function showText(text) {
-    text.addClass('show')
-    
-}
-
-
-  /*auto-fill serch field based on user's IP */
-
+  /*auto-fill search field based on user's IP */
 function offerPrediction(resj) {
     $('.mtb-trail-search-input').attr("value", `${resj.city}`)
 }
@@ -178,8 +208,7 @@ function generateLocation(resj) {
     fetch(`https://ipapi.co/${resj.ip}/json/`)
     .then(response => checkResponse(response))
     .then(resj => offerPrediction(resj))
-    .catch(err => console.log(err.message))
-      
+    .catch(err => console.log(err.message))    
 }
 
 function predictLocation() {
@@ -190,8 +219,13 @@ function predictLocation() {
 }
 
   /*present page */
+function showText(text) {
+    text.addClass('show')
+}
+
+
 $(document).ready(function(){
-    let user_ip = predictLocation();
+    predictLocation();
 
     showText($('.1'))
     setTimeout(function() {
@@ -200,9 +234,6 @@ $(document).ready(function(){
         showText($('.3'))}, 2000)
     setTimeout(function() {
         showText($('.4'))}, 3000) 
-
-    
-
 
 })
 
