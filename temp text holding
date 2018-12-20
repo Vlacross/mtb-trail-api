@@ -1,0 +1,43 @@
+function sortData(res) {
+
+  let arr = res.list;
+  var today = new Date().getDay();
+  let weekDays = 
+    {
+      0: 'Sunday',
+      1: 'Monday',
+      2: 'Tuesday',
+      3: 'Wednesday',
+      4: 'Thursday',
+      5: 'Friday',
+      6: 'Saturday'
+    };
+  console.log(today)
+  let dayNow = [];
+  arr.map(x => {
+    var targetDay = new Date(x.dt_txt).getDay();
+   console.log(targetDay)
+   
+    /*build arr of Weekdays, and add recursive instructions(if Sat is last item in array- then Sat + 2 would land on Monday) */
+    // if(targetDay == today) {console.log(weekDays[targetDay]);}
+    // else if(targetDay == today + 1) {console.log(weekDays[targetDay]);}
+    // else if(targetDay == today + 2) {console.log(weekDays[targetDay]);}
+    // else if(targetDay == today + 3) {console.log(weekDays[targetDay]);}
+    // else if(targetDay == today + 4) {console.log(weekDays[targetDay]);}
+    // else if(targetDay == today + 5) {console.log(weekDays[targetDay]);}
+    // else {console.log(targetDay);}
+        
+  });
+    
+}
+
+function buildForecast(res) {
+  console.log(res);
+  // const today = new Date()
+  const rawDate = Date(res.list[0].dt);
+  const targetDate = new Date(rawDate);
+  console.log(targetDate.getMonth());
+  // console.log(rawDate.getMonth())
+  sortData(res);
+
+}
