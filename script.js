@@ -17,8 +17,8 @@ function checkResponse(res) {
   } throw new Error(res.statusText);
 }
 
-function buildForecast(res) {
-  console.log();
+function buildWeather(res, $el) {
+  
   let desc = res.weather[0].description;
   let highs = res.main.temp_max;
   let lows = res.main.temp_min;
@@ -26,33 +26,40 @@ function buildForecast(res) {
   let wind = res.wind.speed;
   
   let results = 
-  `<li class="trail-listing weather"> <button class="forecast-tab"><span class="forecast-tab-span">Forecast</span></button>
-  <div class="listing-wrapper">
+  `
+  
     <section class="weather-display">
-      <section class="weather-content">
+      
         <img class="weather-icon">
         <h1>${res.weather[0].description}</h1>
         <h3>Wind - ${res.wind.speed}</h3>
         <p>Temp-Highs - ${res.main.temp_max}</p><p>Temp-Lows - ${res.main.temp_min}</p>
         <p>Humidity - ${res.main.humidity}</p>
-      </section>
-    </section>
-     </div>
-    <section class="listing-content">
-      
-  </li>`;
-  // $('.results').replaceWith(`<section class="results">${results}</section>`);
+      </section> 
+
+  `;
+  
+  $('.listing-content').addClass('hidden');
+  $('.forecast-tab').addClass('hidden');
+  // $($el).replaceWith(`<section class="weather-display">${results}</section>`);
+  
+  // $().on('click', '.trail-listing-weather', function(e) {
+  //   e.preventDefault();
+  //   $('.listing-content').removeClass('hidden');
+  //   $('.forecast-tab').removeClass('hidden');
+
+  // })
 }
 
 function buildList(res) {
   let trails = res.trails;
-  console.log(res);
+  console.log(res, '2');
   let results = '';
   let count = 0;
 
   for (let i = 0; i < trails.length; i++) {
     results +=
-        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-lon="${trails[i].longitude}"> <button class="forecast-tab"><span class="forecast-tab-span">Forecast</span></button>
+        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-dynamic="${i}" data-lon="${trails[i].longitude}"> <button class="forecast-tab"><span class="forecast-tab-span">Forecast</span></button>
         <section class="weather-display"></section>
             <div class="listing-wrapper">
                 
@@ -99,22 +106,25 @@ function getLat(inputSearch, distanceFrom) {
 
 
 /*obtain weather forecasts for trails upon request */
-function findForecast(trailCoordinates) {
+function findForecast(trailCoordinates, $el) {
+  
   const lati = trailCoordinates.lat;
   const longi = trailCoordinates.lon;
   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
     .then(response => checkResponse(response))
-    .then(resj => buildForecast(resj))
+    .then(resj => buildWeather(resj, $el))
     .catch(err => console.log(err.message));
 }
 
 function watchResultsActivity() {
     
   $(document).on('click', '.forecast-tab', function(e) {
+    e.stopPropagation();
     const trailCoordinates = $(this).parent()[0].dataset;
-    let forecast = findForecast(trailCoordinates);
-    let par = $(this).parent()
-    console.log(par);
+    let $el = $(this).parent();
+    let forecast = findForecast(trailCoordinates, $el);
+    console.log($el)
+    // console.log($el[0].getAttribute('data-dynamic'));
   });
 }
 
@@ -170,6 +180,7 @@ function watchForm() {
 
   $('.trail-search-form').submit(function(e) {
     e.preventDefault();
+    e.stopPropagation();
     var inputSearch = $('.mtb-trail-search-input').val();
     var distanceFrom = $('.distance-from-location-input').val();
     $('.results-list').empty();
