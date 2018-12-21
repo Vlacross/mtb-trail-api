@@ -22,22 +22,18 @@ function checkResponse(res) {
 
 function convertTemp(temp) {
   let F = ((temp - 273.15) * 9/5) + 32;
-  return F.toFixed(1)
+  return F.toFixed(1);
 }
 
-  /*compile weather data and append */
+/*compile weather data and append */
 function buildWeather(res, $el) {
-  convertTemp()
-
   let desc = res.weather[0].description;
   let rawHigh = res.main.temp_max;
   let highs = convertTemp(rawHigh);
   let rawLow = res.main.temp_min;
-  let lows = convertTemp(rawHigh);
+  let lows = convertTemp(rawLow);
   let humi = res.main.humidity;
   let wind = res.wind.speed;
-  
-  console.log(lows)
 
   let weatherCard = $el[0].children[1];
   let trailCard = $el[0].children[2];
@@ -57,13 +53,13 @@ function buildWeather(res, $el) {
 }
 
 function noWeather(err, $el) {
-  console.log(err.message)
+  console.log(err.message);
   let weatherCard = $el[0].children[1];
   let trailCard = $el[0].children[2];
   let results = 
   `<h3>Woops!</h3>
    <p>Couldn't get the weather for this trail!</p>
-   <p>Try again later.</p>`
+   <p>Try again later.</p>`;
 
   $(trailCard).addClass('hidden'); 
   $(weatherCard).replaceWith(results);
@@ -71,7 +67,6 @@ function noWeather(err, $el) {
 
 /*obtain weather forecasts for trails upon request */
 function findForecast(trailCoordinates, $el) {
-  console.log(trailCoordinates)
   let lati = trailCoordinates.lat;
   let longi = trailCoordinates.lon;
   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
@@ -80,44 +75,35 @@ function findForecast(trailCoordinates, $el) {
     .catch(err => noWeather(err, $el));
 }
 
-
 /*handle and display weather data */
-function handleCardDisplay($el) {
+function handleCardDisplay($card) {
+  let listingTab = $card.find('.forecast-tab');
+  let $weatherCard = $card.find('.weather-display');
+  let $trailCard = $card.find('.listing-wrapper');
   
-  let listingButton = $el[0].children[0]
-  let trailCoordinates = $el[0].dataset;
-  let $weatherCard = $el[0].children[1];
-  let $trailCard = $el[0].children[2];
-  // let tabState = $('[class~=\'forecast-tab\']').attr('class')
-  let tabState = $(listingButton).attr('class')
-
+  let tabState = $(listingTab).attr('class');
+  let trailCoordinates = $card.data();
 
   if (tabState === 'forecast-tab weather') { /*show listing */
-    $(listingButton).addClass('listing').removeClass('weather')
-    console.log(tabState, 'listing')
+    $(listingTab).addClass('listing').removeClass('weather');
     $($trailCard).removeClass('hidden');
-    $($weatherCard).addClass('hidden')
-  } else
-  if (tabState === 'forecast-tab listing') { /*show weather */
-    
-    $(listingButton).removeClass('listing').addClass('weather')
+    $($weatherCard).addClass('hidden');
+  } 
+  else if (tabState === 'forecast-tab listing') { /*show weather */
+    $(listingTab).removeClass('listing').addClass('weather');
     $($trailCard).addClass('hidden');
-    $($weatherCard).removeClass('hidden')
-  }else
-  if (tabState === 'forecast-tab listing-new') {
-    
-    $(listingButton).removeClass('listing-new').addClass('weather')
-    findForecast(trailCoordinates, $el)
-    
-    
-  };
+    $($weatherCard).removeClass('hidden');
+  }
+  else if (tabState === 'forecast-tab listing-new') {
+    $(listingTab).removeClass('listing-new').addClass('weather');
+    findForecast(trailCoordinates, $card);  
+  }
 }
 
 function buildList(res) {
   let trails = res.trails;
-  console.log(res, '2');
   let count = 0;
-  let results = ``;
+  let results = '';
 
   for (let i = 0; i < trails.length; i++) {
     results +=
@@ -137,9 +123,9 @@ function buildList(res) {
       </li>`;
     count += 1;
   }
-  let legend = `<p class="display-legend">Displaying ${count} out of ${trails.length} results</p>`
-$('.results').replaceWith(`<section class="results">${results}</section>`);
-$('.display-legend').replaceWith(legend)
+  let legend = `<p class="display-legend">Displaying ${count} out of ${trails.length} results</p>`;
+  $('.results').replaceWith(`<section class="results">${results}</section>`);
+  $('.display-legend').replaceWith(legend);
   
 }
 
@@ -152,7 +138,6 @@ function getTrails (res, dist) {
   const lat = res.results[0].geometry.location.lat;
   const long =res.results[0].geometry.location.lng; 
   const trailURL = `https://www.mtbproject.com/data/get-trails?lat=${lat}&lon=${long}&maxDistance=${dist}&key=${API_KEY.MTB_PROJECT}`;
-
   fetch(trailURL)
     .then(response => checkResponse(response))
     .then(resj => buildList(resj))
@@ -160,7 +145,7 @@ function getTrails (res, dist) {
 }
 
 function noTrails(err, inputSearch) {
-  console.log(err.message)
+  console.log(err.message);
   let results = 
   `<h3>Hmm</h3>
    <p>We couldn't find "${inputSearch}"!</p>
@@ -173,7 +158,6 @@ function noTrails(err, inputSearch) {
 
 /*obtain lat & lon for weather and trail uses  */
 function getLat(inputSearch, distanceFrom) {
-  console.log('2');
   const geoURL = `https://maps.googleapis.com/maps/api/geocode/json?address=${inputSearch}&key=${API_KEY.GOOGLE_GEOCODE}`;
         
   fetch(geoURL)
@@ -185,11 +169,11 @@ function getLat(inputSearch, distanceFrom) {
 function watchResultsActivity() {
     
   $('main').on('click', '.forecast-tab', function(e) {
-    e.preventDefault()
+    e.preventDefault();
     e.stopPropagation();
     let $el = $(this).parent();
     
-    handleCardDisplay($el) 
+    handleCardDisplay($el); 
   });
 }
 
@@ -222,8 +206,6 @@ function displayResults() {
     $('.search-tray-tab').slideDown(1000); }, 2000);  
   $('.results').removeClass('hidden');
   
-  // watchSearchTab();
-  // watchResultsActivity();
 }
 
 function leaveLanding() {
@@ -235,11 +217,11 @@ function leaveLanding() {
 /*switch layout to accomodate for result listings */
 function pageTransition() {
   const formState = $('[class~=\'trail-search-form\']').attr('class');
-  if(formState == 'trail-search-form initial'){ 
+  if(formState === 'trail-search-form initial'){ 
     
     leaveLanding();
   } 
-  $('.trail-search-form').addClass('hidden')
+  $('.trail-search-form').addClass('hidden');
   displayResults();
 }
 
@@ -299,7 +281,7 @@ $(document).ready(function(e){
 
   watchForm();
   watchSearchTab();
-  watchResultsActivity()
+  watchResultsActivity();
 });
 
 

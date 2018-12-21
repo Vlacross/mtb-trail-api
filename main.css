@@ -10,7 +10,7 @@ body {
     background-color: rgba(0, 0, 0, .85);
     color: white;
     opacity: 1;
-  
+    margin: 0;
 }
 
 main {
@@ -232,6 +232,13 @@ a:focus {
 }
 
 @media only screen and (max-width: 600px) {
+    main {
+        padding: 0px;
+    }
+    .li {
+        margin: 15px;
+        font-size: 50%;
+    }
     .mtb-image {
         background-size: cover;
         background-position: 25% 0px;
@@ -248,12 +255,12 @@ a:focus {
 @media only screen and (max-width: 400px) {
     .mtb-image {
         background-size: cover;
-        background-position: 20% 0px;
+        background-position: 25% 0px;
         
     }
     .mtb-image:hover {
         background-size: cover;
-        background-position: 20% 0px;
+        background-position: 25% 0px;
    
     }
 }
