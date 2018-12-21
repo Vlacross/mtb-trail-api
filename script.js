@@ -10,6 +10,7 @@ const searchTabTrayOpen =  '<button id="search-tray-tab" class="search-tray-tab 
 const searchTabTrayClose = '<button id="search-tray-tab" class="search-tray-tab close"><span class="tab-span" tabindex="0">Close Tray</span></button>';
 
 
+
 /*handle response */
 function checkResponse(res) {
   if(res.ok) {
@@ -17,6 +18,10 @@ function checkResponse(res) {
   } throw new Error(res.statusText);
 }
 
+
+
+
+/*compile weather data and append */
 function buildWeather(res, $el) {
   
   let desc = res.weather[0].description;
@@ -25,9 +30,11 @@ function buildWeather(res, $el) {
   let humi = res.main.humidity;
   let wind = res.wind.speed;
   
+  let weatherCard = $el[0].children[1];
+  let trailCard = $el[0].children[2];
+
   let results = 
   `
-  
     <section class="weather-display">
       
         <img class="weather-icon">
@@ -36,30 +43,64 @@ function buildWeather(res, $el) {
         <p>Temp-Highs - ${res.main.temp_max}</p><p>Temp-Lows - ${res.main.temp_min}</p>
         <p>Humidity - ${res.main.humidity}</p>
       </section> 
+  `; 
+  $(trailCard).addClass('hidden'); 
+  $(weatherCard).replaceWith(results);
+}
 
-  `;
-  
-  $('.listing-content').addClass('hidden');
-  $('.forecast-tab').addClass('hidden');
-  // $($el).replaceWith(`<section class="weather-display">${results}</section>`);
-  
-  // $().on('click', '.trail-listing-weather', function(e) {
-  //   e.preventDefault();
-  //   $('.listing-content').removeClass('hidden');
-  //   $('.forecast-tab').removeClass('hidden');
 
-  // })
+/*obtain weather forecasts for trails upon request */
+function findForecast(trailCoordinates, $el) {
+  console.log($el, 'fetch')
+  let lati = trailCoordinates.lat;
+  let longi = trailCoordinates.lon;
+  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
+    .then(response => checkResponse(response))
+    .then(resj => buildWeather(resj, $el))
+    .catch(err => console.log(err.message));
+}
+
+
+/*handle and display weather data */
+function handleCardDisplay($el) {
+  
+  let listingButton = $el[0].children[0]
+  let trailCoordinates = $el[0].dataset;
+  let $weatherCard = $el[0].children[1];
+  let $trailCard = $el[0].children[2];
+  // let tabState = $('[class~=\'forecast-tab\']').attr('class')
+  let tabState = $(listingButton).attr('class')
+
+
+  if (tabState === 'forecast-tab weather') { /*show listing */
+    $(listingButton).addClass('listing').removeClass('weather')
+    console.log(tabState, 'listing')
+    $($trailCard).removeClass('hidden');
+    $($weatherCard).addClass('hidden')
+  } else
+  if (tabState === 'forecast-tab listing') { /*show weather */
+    
+    $(listingButton).removeClass('listing').addClass('weather')
+    $($trailCard).addClass('hidden');
+    $($weatherCard).removeClass('hidden')
+  }else
+  if (tabState === 'forecast-tab listing-new') {
+    
+    $(listingButton).removeClass('listing-new').addClass('weather')
+    findForecast(trailCoordinates, $el)
+    
+    
+  };
 }
 
 function buildList(res) {
   let trails = res.trails;
   console.log(res, '2');
   let results = '';
-  let count = 0;
 
   for (let i = 0; i < trails.length; i++) {
     results +=
-        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-dynamic="${i}" data-lon="${trails[i].longitude}"> <button class="forecast-tab"><span class="forecast-tab-span">Forecast</span></button>
+        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-dynamic="${i}" data-lon="${trails[i].longitude}"> <button class="forecast-tab listing-new"><span class="forecast-tab-span">Forecast</span></button>
         <section class="weather-display"></section>
             <div class="listing-wrapper">
                 
@@ -75,6 +116,7 @@ function buildList(res) {
         </li>`;
   }
   $('.results').replaceWith(`<section class="results">${results}<</section>`);
+  
 }
 
 /*obtain list of trails to display based on lat & lon and distance from location inputs     <section class="results hidden">
@@ -104,27 +146,14 @@ function getLat(inputSearch, distanceFrom) {
     .catch(err => console.log(err.message));
 }
 
-
-/*obtain weather forecasts for trails upon request */
-function findForecast(trailCoordinates, $el) {
-  
-  const lati = trailCoordinates.lat;
-  const longi = trailCoordinates.lon;
-  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
-    .then(response => checkResponse(response))
-    .then(resj => buildWeather(resj, $el))
-    .catch(err => console.log(err.message));
-}
-
 function watchResultsActivity() {
     
-  $(document).on('click', '.forecast-tab', function(e) {
+  $('main').on('click', '.forecast-tab', function(e) {
+    e.preventDefault()
     e.stopPropagation();
-    const trailCoordinates = $(this).parent()[0].dataset;
     let $el = $(this).parent();
-    let forecast = findForecast(trailCoordinates, $el);
-    console.log($el)
-    // console.log($el[0].getAttribute('data-dynamic'));
+    
+    handleCardDisplay($el) 
   });
 }
 
@@ -134,9 +163,11 @@ function watchSearchTab() {
 
   $('main').on('click', '.search-tray-tab', function(e) {
     e.preventDefault();
+    e.stopPropagation();
     let tabState = $('[class~=\'search-tray-tab\']').attr('class');
+    
     if(tabState === 'search-tray-tab close') {   
-      $('.search-tray-tab').slideUp(); 
+      $('.search-tray-tab').slideUp(500); 
       $('.trail-search-form').addClass('hidden').slideUp(1000);
       $('.search-tray-tab').replaceWith(searchTabTrayOpen).removeClass('hidden');
       $('.search-tray-tab').slideDown(1300);
@@ -144,7 +175,7 @@ function watchSearchTab() {
     if(tabState === 'search-tray-tab open') {    
       $('.search-tray-tab').slideUp(500);
       $('.trail-search-form').removeClass('hidden').slideDown(1000);
-      $('.search-tray-tab').replaceWith(searchTabTrayClose).fadeIn(500);
+      $('.search-tray-tab').replaceWith(searchTabTrayClose);
     }  
   }); 
 }
@@ -154,14 +185,14 @@ function displayResults() {
     $('.search-tray-tab').removeClass('hidden');
     $('.search-tray-tab').slideDown(1000); }, 2000);  
   $('.results').removeClass('hidden');
-  $('.results').fadeIn(3000);
-  watchSearchTab();
-  watchResultsActivity();
+  
+  // watchSearchTab();
+  // watchResultsActivity();
 }
 
 function leaveLanding() {
   $('.mtb-image').slideUp(2000);
-  $('.banner').slideUp(2000).replaceWith($('.trail-search-form').addClass('hidden').removeClass('initial'));
+  $('.banner').slideUp(2000).replaceWith($('.trail-search-form').removeClass('initial'));
     
 }
 
@@ -169,9 +200,10 @@ function leaveLanding() {
 function pageTransition() {
   const formState = $('[class~=\'trail-search-form\']').attr('class');
   if(formState == 'trail-search-form initial'){ 
+    
     leaveLanding();
   } 
-    
+  $('.trail-search-form').addClass('hidden')
   displayResults();
 }
 
@@ -186,8 +218,7 @@ function watchForm() {
     $('.results-list').empty();
     pageTransition();
     getLat(inputSearch, distanceFrom);
-    // buildList(objData)
-    // console.log(inputSearch, distanceFrom)
+    
   });       
 }
 
@@ -217,7 +248,9 @@ function showText(text) {
 }
 
 
-$(document).ready(function(){
+$(document).ready(function(e){
+  e.stopPropagation;
+  e.preventDefault;
   predictLocation();
 
   showText($('.1'));
@@ -228,8 +261,10 @@ $(document).ready(function(){
   setTimeout(function() {
     showText($('.4'));}, 3000); 
 
+watchForm();
+watchSearchTab();
+watchResultsActivity()
 });
 
 
 
-watchForm();
