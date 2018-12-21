@@ -15,14 +15,14 @@ const searchTabTrayClose = '<button id="search-tray-tab" class="search-tray-tab 
 function checkResponse(res) {
   if(res.ok) {
     return res.json();
-  } throw new Error(res.statusText);
+  } 
+  throw new Error(res.statusText);
 }
 
 
 function convertTemp(temp) {
-  console.log(temp)
-let F = ((temp - 273.15) * 9/5) + 32;
-return F.toFixed(1)
+  let F = ((temp - 273.15) * 9/5) + 32;
+  return F.toFixed(1)
 }
 
   /*compile weather data and append */
@@ -45,7 +45,6 @@ function buildWeather(res, $el) {
   let results = 
   `
     <section class="weather-display">
-      
         <img class="weather-icon">
         <h1>${desc}</h1>
         <h3>Wind - ${wind}</h3>
@@ -57,6 +56,18 @@ function buildWeather(res, $el) {
   $(weatherCard).replaceWith(results);
 }
 
+function noWeather(err, $el) {
+  console.log(err.message)
+  let weatherCard = $el[0].children[1];
+  let trailCard = $el[0].children[2];
+  let results = 
+  `<h3>Woops!</h3>
+   <p>Couldn't get the weather for this trail!</p>
+   <p>Try again later.</p>`
+
+  $(trailCard).addClass('hidden'); 
+  $(weatherCard).replaceWith(results);
+}
 
 /*obtain weather forecasts for trails upon request */
 function findForecast(trailCoordinates, $el) {
@@ -66,7 +77,7 @@ function findForecast(trailCoordinates, $el) {
   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
     .then(response => checkResponse(response))
     .then(resj => buildWeather(resj, $el))
-    .catch(err => console.log(err.message));
+    .catch(err => noWeather(err, $el));
 }
 
 
@@ -148,6 +159,18 @@ function getTrails (res, dist) {
     .catch(err => console.log(err.message));
 }
 
+function noTrails(err, inputSearch) {
+  console.log(err.message)
+  let results = 
+  `<h3>Hmm</h3>
+   <p>We couldn't find "${inputSearch}"!</p>
+   <p>Check your spelling and try again!</p>`;
+
+  $('.results').replaceWith(`<section class="results error">${results}</section>`);
+   
+
+}
+
 /*obtain lat & lon for weather and trail uses  */
 function getLat(inputSearch, distanceFrom) {
   console.log('2');
@@ -156,7 +179,7 @@ function getLat(inputSearch, distanceFrom) {
   fetch(geoURL)
     .then(response => checkResponse(response))
     .then(resj => getTrails(resj, distanceFrom))
-    .catch(err => console.log(err.message));
+    .catch(err => noTrails(err, inputSearch));
 }
 
 function watchResultsActivity() {
@@ -274,9 +297,9 @@ $(document).ready(function(e){
   setTimeout(function() {
     showText($('.4'));}, 3000); 
 
-watchForm();
-watchSearchTab();
-watchResultsActivity()
+  watchForm();
+  watchSearchTab();
+  watchResultsActivity()
 });
 
 
