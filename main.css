@@ -1,10 +1,13 @@
 * {
     box-sizing: border-box;
+    font-family: 'Russo One', sans-serif;
     /* transition: all 500ms; */
 }
 
+
+
 body {
-    background-color: black;
+    background-color: rgba(0, 0, 0, .85);
     color: white;
     opacity: 1;
   
@@ -35,12 +38,23 @@ li {
     margin: 30px; 
 }
 
+a {
+    color: rgba(1, 132, 255, 0.719);
+    transition: all 1s;
+}
 
+a:hover {
+    color: rgba(255, 255, 255, 0.746);
+}
+
+a:focus {
+    color: rgba(212, 38, 235, 0.493);
+}
 
 .banner {
     display: flex;
     justify-content: center;
-    
+    color: rgba(1, 132, 255, 0.719)
 }
 
 .text {
@@ -115,7 +129,7 @@ li {
 }
 
 .search-tray-tab:hover {
-    box-shadow: 0 5px 35px white;
+    box-shadow: 0 5px 35px rgba(1, 132, 255, 0.719) inset;
     border-radius: 8px 8px 8px 8px;
     transform: translateY(20%);
 }
@@ -132,19 +146,22 @@ li {
     box-shadow: 0 0 25px white inset;
 }
 
-.search-tray-tab-span {
+.display-legend {
     margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .results {
     display: flex;
     flex-wrap: wrap;
     border-radius: 8px;
-    box-shadow: 0 0 25px goldenrod inset; 
+    box-shadow: 0 0 25px silver; 
 }
 
 .listing-content {
     margin: 14px;
+    
 }
 
 .forecast-tab {
@@ -161,7 +178,7 @@ li {
 }
 
 .forecast-tab:hover {
-    box-shadow: 0 0 25px red inset;
+    box-shadow: 0 0 25px rgba(1, 132, 255, 0.719) inset;
 }
 
 .forecast-tab:focus {
@@ -170,6 +187,7 @@ li {
 
 .listing-icon {
     max-width: 160px;
+    
 }
 
 .hidden {
@@ -180,9 +198,7 @@ li {
     margin: 2px 0;
 }
 
-[class*="search-tray-tab"] {
-    text-align: center;
-}
+
 
 @media only screen and (max-width: 900px) {
     .search-panel {
@@ -233,4 +249,12 @@ li {
         background-position: 20% 0px;
    
     }
+}
+@media only screen and (max-height: 700px) {
+.search-tray-tab {
+    height: 20px;
+}
+.forecast-tab {
+    height: 20px;
+}
 }

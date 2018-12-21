@@ -7,7 +7,7 @@ const API_KEY = {
 };
 
 const searchTabTrayOpen =  '<button id="search-tray-tab" class="search-tray-tab open" tabindex="0"><span class="tab-span">Search</span></button>';
-const searchTabTrayClose = '<button id="search-tray-tab" class="search-tray-tab close"><span class="tab-span" tabindex="0">Close Tray</span></button>';
+const searchTabTrayClose = '<button id="search-tray-tab" class="search-tray-tab close"><span class="tab-span" tabindex="0">Close</span></button>';
 
 
 
@@ -19,17 +19,26 @@ function checkResponse(res) {
 }
 
 
+function convertTemp(temp) {
+  console.log(temp)
+let F = ((temp - 273.15) * 9/5) + 32;
+return F.toFixed(1)
+}
 
-
-/*compile weather data and append */
+  /*compile weather data and append */
 function buildWeather(res, $el) {
-  
+  convertTemp()
+
   let desc = res.weather[0].description;
-  let highs = res.main.temp_max;
-  let lows = res.main.temp_min;
+  let rawHigh = res.main.temp_max;
+  let highs = convertTemp(rawHigh);
+  let rawLow = res.main.temp_min;
+  let lows = convertTemp(rawHigh);
   let humi = res.main.humidity;
   let wind = res.wind.speed;
   
+  console.log(lows)
+
   let weatherCard = $el[0].children[1];
   let trailCard = $el[0].children[2];
 
@@ -38,10 +47,10 @@ function buildWeather(res, $el) {
     <section class="weather-display">
       
         <img class="weather-icon">
-        <h1>${res.weather[0].description}</h1>
-        <h3>Wind - ${res.wind.speed}</h3>
-        <p>Temp-Highs - ${res.main.temp_max}</p><p>Temp-Lows - ${res.main.temp_min}</p>
-        <p>Humidity - ${res.main.humidity}</p>
+        <h1>${desc}</h1>
+        <h3>Wind - ${wind}</h3>
+        <p>Temp-Highs - ${highs}&#x00B0; F</p><p>Temp-Lows - ${lows}&#x00B0; F</p>
+        <p>Humidity - ${humi}</p>
       </section> 
   `; 
   $(trailCard).addClass('hidden'); 
@@ -51,7 +60,7 @@ function buildWeather(res, $el) {
 
 /*obtain weather forecasts for trails upon request */
 function findForecast(trailCoordinates, $el) {
-  console.log($el, 'fetch')
+  console.log(trailCoordinates)
   let lati = trailCoordinates.lat;
   let longi = trailCoordinates.lon;
   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
@@ -96,26 +105,30 @@ function handleCardDisplay($el) {
 function buildList(res) {
   let trails = res.trails;
   console.log(res, '2');
-  let results = '';
+  let count = 0;
+  let results = ``;
 
   for (let i = 0; i < trails.length; i++) {
     results +=
-        `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-dynamic="${i}" data-lon="${trails[i].longitude}"> <button class="forecast-tab listing-new"><span class="forecast-tab-span">Forecast</span></button>
-        <section class="weather-display"></section>
-            <div class="listing-wrapper">
-                
-             
-              <section class="listing-content">
-                <img class="listing-icon" src="${trails[i].imgSmall}"><h1>Name:${trails[i].name}</h1>
-                <h3>Location: ${trails[i].location}</h3><h3>Length: ${trails[i].length} miles</h3>
-                <p>Summary - ${trails[i].summary}</p> <p>Difficulty: ${trails[i].difficulty}</p>
-                <p>Ascent: ${trails[i].ascent} feet</p> <p>Descent: ${trails[i].descent} feet</p>
-                <a href="${trails[i].url}">For more information, click here!</a>
-              </section>
-            </div>
-        </li>`;
+      `<li class="trail-listing ${i}" data-lat="${trails[i].latitude}" data-dynamic="${i}" data-lon="${trails[i].longitude}"> <button class="forecast-tab listing-new"><span class="forecast-tab-span">Forecast</span></button>
+      <section class="weather-display"></section>
+          <div class="listing-wrapper">
+              
+            
+            <section class="listing-content">
+              <img class="listing-icon" src="${trails[i].imgSmall}"><h1>Name:${trails[i].name}</h1>
+              <h3>Location: ${trails[i].location}</h3><h3>Length: ${trails[i].length} miles</h3>
+              <p>Summary - ${trails[i].summary}</p> <p>Difficulty: ${trails[i].difficulty}</p>
+              <p>Ascent: ${trails[i].ascent} feet</p> <p>Descent: ${trails[i].descent} feet</p>
+              <a href="${trails[i].url}">For more information, click here!</a>
+            </section>
+          </div>
+      </li>`;
+    count += 1;
   }
-  $('.results').replaceWith(`<section class="results">${results}<</section>`);
+  let legend = `<p class="display-legend">Displaying ${count} out of ${trails.length} results</p>`
+$('.results').replaceWith(`<section class="results">${results}</section>`);
+$('.display-legend').replaceWith(legend)
   
 }
 
