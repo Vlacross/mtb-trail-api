@@ -26,7 +26,7 @@ function convertTemp(temp) {
 }
 
 /*compile weather data and append */
-function buildWeather(res, $el) {
+function buildWeather(res, $card) {
   let desc = res.weather[0].description;
   let rawHigh = res.main.temp_max;
   let highs = convertTemp(rawHigh);
@@ -35,8 +35,8 @@ function buildWeather(res, $el) {
   let humi = res.main.humidity;
   let wind = res.wind.speed;
 
-  let weatherCard = $el[0].children[1];
-  let trailCard = $el[0].children[2];
+  let weatherCard =$card.find('.weather-display');
+  let trailCard = $card.find('.listing-wrapper');
 
   let results = 
   `
@@ -52,10 +52,10 @@ function buildWeather(res, $el) {
   $(weatherCard).replaceWith(results);
 }
 
-function noWeather(err, $el) {
+function noWeather(err, $card) {
   console.log(err.message);
-  let weatherCard = $el[0].children[1];
-  let trailCard = $el[0].children[2];
+  let weatherCard = $card.find('.weather-display');
+  let trailCard = $card.find('.listing-wrapper');
   let results = 
   `<h3>Woops!</h3>
    <p>Couldn't get the weather for this trail!</p>
@@ -66,13 +66,13 @@ function noWeather(err, $el) {
 }
 
 /*obtain weather forecasts for trails upon request */
-function findForecast(trailCoordinates, $el) {
+function findForecast(trailCoordinates, $card) {
   let lati = trailCoordinates.lat;
   let longi = trailCoordinates.lon;
   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lati}&lon=${longi}&APPID=267ca2de084374c760f4845dd17c57f4`)
     .then(response => checkResponse(response))
-    .then(resj => buildWeather(resj, $el))
-    .catch(err => noWeather(err, $el));
+    .then(resj => buildWeather(resj, $card))
+    .catch(err => noWeather(err, $card));
 }
 
 /*handle and display weather data */
@@ -171,9 +171,9 @@ function watchResultsActivity() {
   $('main').on('click', '.forecast-tab', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    let $el = $(this).parent();
+    let $card = $(this).parent();
     
-    handleCardDisplay($el); 
+    handleCardDisplay($card); 
   });
 }
 
