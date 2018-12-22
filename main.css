@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    /* transition: all 500ms; */
 }
 
 body {
@@ -12,40 +13,224 @@ body {
 main {
     display: flex;
     flex-direction: column;
+    padding: 14px;
+}
+
+input {
+    border: none;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    color: white;
 }
 
 li {
+    flex: 1 0 40%;
     text-decoration: none;
+    padding: 0 22px 22px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 0 0 15px forestgreen;
+    margin: 30px; 
+}
+
+
+
+.banner {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.text {
+    opacity: 0;
+    transition: all 4s;
+}
+
+.show {
+    opacity: 1;
+}
+
+.search-panel {
+    background: linear-gradient ( 
+        rgba(0, 0, 0, 0.28),  
+        rgba(0, 0, 0, 0.28)
+        );
+    border: none;
+    border-radius: 20px 8px 20px 8px;
+    box-shadow: 0 0 15px white;
+    margin: 10px;
+    padding: 10px;
+}
+
+.search-panel-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .trail-search {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-
+    padding: 4px;
 }
 
 .mtb-image {
-    border: solid 1px white;
+    display: flex;
+    justify-content: center;
+    width: 100%;
     height: 80vh;
     background: linear-gradient(
-        rgba(0, 0, 0, 0.28),
-        rgba(0, 0, 0, 0.28)
-),
-                URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
+        rgba(0, 0, 0, 0.05),
+        rgba(0, 0, 0, 0.05)
+        ),
+        URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
     background-size: 100%;
-    
+    border-radius: 8px 20px 8px 20px;
+    align-content: center;
+    box-shadow: 0 0 15px white;        
 }
 
 .mtb-image:hover {
     height: 80vh;
-    background: URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
-    background-size: 100%;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.28),
+        rgba(0, 0, 0, 0.28)
+        ),
+        URL("mtb_api_pics/log-road-pan.jpg") no-repeat center;
+    background-size: 100%; 
 }
 
+.search-tray-tab {
+    width: 20%;
+    background: rgba(0, 0, 0, 0.28);
+    height: 3vh;
+    margin: auto;
+    box-shadow: 0 0 15px white;
+    border-radius: 0px 0px 8px 8px;
+    transition: all 500ms;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.search-tray-tab:hover {
+    box-shadow: 0 5px 35px white;
+    border-radius: 8px 8px 8px 8px;
+    transform: translateY(20%);
+}
+
+.search-tray-tab:active {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition-duration: 10ms;
+    
+}
+
+.search-tray-tab:focus {
+    box-shadow: 0 0 25px white inset;
+}
+
+.search-tray-tab-span {
+    margin: auto;
+}
+
+.results {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    box-shadow: 0 0 25px goldenrod inset; 
+}
+
+.listing-content {
+    margin: 14px;
+}
+
+.forecast-tab {
+    
+    min-width: 140px;
+    height: 3vh;
+    background: rgba(0, 0, 0, 0.28);
+    box-shadow: 0 0 15px white;
+    border-radius: 0px 0px 8px 8px;
+    transition: all 500ms;
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+.forecast-tab:hover {
+    box-shadow: 0 0 25px red inset;
+}
+
+.forecast-tab:focus {
+    box-shadow: 0 0 25px white inset;
+}
 
 .listing-icon {
     max-width: 160px;
+}
+
+.hidden {
+    display: none;
+}
+
+.text {
+    margin: 2px 0;
+}
+
+[class*="search-tray-tab"] {
+    text-align: center;
+}
+
+@media only screen and (max-width: 900px) {
+    .search-panel {
+        background: linear-gradient(  
+            rgba(0, 0, 0, 0.5),  
+            rgba(0, 0, 0, 0.5)
+            );
+    }
+    .mtb-image {
+      background-size: cover;
+      background-position: 30% 0px;
+      
+  }
+    .mtb-image:hover {
+      background-size: cover;
+      background-position: 30% 0px;
+  }
+}
+
+@media only screen and (max-width: 810px) {
+    .tab {
+        min-width: 150px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .mtb-image {
+        background-size: cover;
+        background-position: 25% 0px;
+        
+    }
+    .mtb-image:hover {
+        background-size: cover;
+        background-position: 25% 0px;
+  
+    }
+
+}
+
+@media only screen and (max-width: 400px) {
+    .mtb-image {
+        background-size: cover;
+        background-position: 20% 0px;
+        
+    }
+    .mtb-image:hover {
+        background-size: cover;
+        background-position: 20% 0px;
+   
+    }
 }

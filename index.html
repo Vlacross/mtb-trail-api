@@ -8,33 +8,33 @@
 </head>
 <body>
 <main role="main">
-    <section id="trail-search" class="trail-search">
-        <h1>Search for Singletracks Near You!</h1>
-        <div class="mtb-image"></div>
-        <form id="trail-search-form" class="trail-search-form">
-       <fieldset class="search-panel">
-
-        <label for="mtb-trail-search-input" id="mtb-trail-search-label" class="mtb-trail-search-label">Enter your Postal code for local trails!
-            <input id="mtb-trail-search-input" class="mtb-trail-search-input" type="text" required>
-       </label>
-
-       <label for="distance-from-location-input" id="distance-from-location-label" class="distance-from-location-label">Enter how many miles from your location:
-            <input id="distance-from-location-input" class="distance-from-location-input" type="number" min="1" max="500">
-       </label>
-
-       <label for="mtb-trail-search-submit" id="mtb-trail-submit-label" class="mtb-trail-submit-label">
-            <input id="mtb-trail-search-submit" class="mtb-trail-search-submit" type="submit" required>
-       </label>
-
-       </fieldset>
-       </form>
-       <a class="post-form-anchor"></a>
-    </section>
-
-    <section id="results" class="results">
-        <ul id="results-list" class="results-list">
-
-    </ul>
+    <button id="search-tray-tab" class="search-tray-tab open hidden" tabindex="0"><span class="tab-span">Search</span></button>
+    <div class="banner"><h1 id="intro" class="intro text 1">Search Trails Near You!</h1></div>
+  <section id="trail-search" class="trail-search">
+    <div class="mtb-image">
+        <form id="trail-search-form" class="trail-search-form initial">
+          <fieldset class="search-panel">
+            <div class="search-panel-wrapper">
+              <label for="mtb-trail-search-input" id="mtb-trail-search-label" class="mtb-trail-search-label text 2">Enter your location or Postal code for local trails!</label>
+                  <input id="mtb-trail-search-input" class="mtb-trail-search-input text 2" type="text" required>
+              
+            
+            
+              <label for="distance-from-location-input" id="distance-from-location-label" class="distance-from-location-label text 3">Enter how many miles from your location:</label>
+                  <input id="distance-from-location-input" class="distance-from-location-input text 3" type="number" min="1" max="500">
+              
+            
+              
+                  <input id="mtb-trail-search-submit" class="mtb-trail-search-submit text 4" type="submit" required>
+              
+            </div>
+          </fieldset>
+        </form>
+        <a class="post-form-anchor"></a>
+    </div>
+  </section>
+  <section class="results hidden">
+    
 </section>
 
 
@@ -46,6 +46,9 @@
   src="https://code.jquery.com/jquery-3.3.1.js"
   integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>
+<!-- <script src="static.js"></script>
+<script src="dynamic-requests.js"></script>
+<script src="visual-assistance.js"></script> -->
 <script src="script.js"></script>
 </body>
 </html>
