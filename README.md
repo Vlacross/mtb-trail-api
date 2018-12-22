@@ -9,3 +9,5 @@ A location is entered along with a distance in miles(from the location specified
    weather.
 
 If the user wants to search a second location, there is a tab at the top to search again.
+
+<img src="https://raw.githubusercontent.com/Vlacross/Vlacross.github.io/master/mtb_api_pics/snow-valley-pan.jpg">
